@@ -7,8 +7,8 @@ dotenv.config();
 
 const getServer = () => {
   const server = new Server({
-    host: "localhost",
-    port: 3000,
+    host: process.env.HOST!,
+    port: parseInt(process.env.PORT!),
   });
 
   server.route(routes);

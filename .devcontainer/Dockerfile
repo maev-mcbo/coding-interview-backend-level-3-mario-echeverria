@@ -1,12 +1,17 @@
-FROM node:20
+FROM node:20-slim
 
-# Install basic development tools
-RUN apt update && apt install -y less man-db sudo
 
-# Ensure default `node` user has access to `sudo`
-ARG USERNAME=node
-RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    && chmod 0440 /etc/sudoers.d/$USERNAME
+WORKDIR /app
 
-# Set `DEVCONTAINER` environment variable to help with orientation
-ENV DEVCONTAINER=true
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]
