@@ -2,14 +2,12 @@
 
 ## Para ejecutar el proyecto
 
-```bash
 npm run dev
-```
 
 ## Para ejecutar los tests
-```bash
+
 npm run test
-```
+
 ## postman collection
 
 en la carpeta e2e se encuentra el archivo postman-endpoints.json, este archivo contiene las rutas de la API y los endpoints que se deben probar.
