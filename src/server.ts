@@ -1,26 +1,43 @@
-import Hapi from '@hapi/hapi'
-import { defineRoutes } from './routes'
+import { Server } from "@hapi/hapi";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import { routes } from "./routes";
+
+dotenv.config();
 
 const getServer = () => {
-    const server = Hapi.server({
-        host: 'localhost',
-        port: 3000,
-    })
+  const server = new Server({
+    host: "localhost",
+    port: 3000,
+  });
 
-    defineRoutes(server)
+  server.route(routes);
 
-    return server
-}
+  return server;
+};
+
+export const connectDB = async () => {
+  try {
+    const mongoURI = process.env.MONGODB_URI;
+
+    await mongoose.connect(mongoURI!);
+    console.log("MongoDB Connected...");
+  } catch (err) {
+    console.error("Error connecting to MongoDB:", err);
+    process.exit(1);
+  }
+};
 
 export const initializeServer = async () => {
-    const server = getServer()
-    await server.initialize()
-    return server
-}
+  const server = getServer();
+  await connectDB();
+  await server.initialize();
+  return server;
+};
 
 export const startServer = async () => {
-    const server = getServer()
-    await server.start()
-    console.log(`Server running on ${server.info.uri}`)
-    return server
+  const server = await initializeServer();
+  await server.start();
+  console.log(`Server running on ${server.info.uri}`);
+  return server;
 };

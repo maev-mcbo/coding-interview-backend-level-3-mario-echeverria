@@ -1,2 +1,5 @@
 node_modules
 mock.ts
+# Environment variables
+.env
+dist
